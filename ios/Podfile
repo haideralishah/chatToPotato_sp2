@@ -21,6 +21,13 @@ target 'ChatToPotato' do
 #  post_install do |installer|
 #    flipper_post_install(installer)
 #  end
+post_install do |installer|
+   installer.pods_project.targets.each do |target|
+       target.build_configurations.each do |config|
+           config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '-DDONT_AUTOINSTALL_REANIMATED'
+       end
+   end
+end
 end
 
 target 'ChatToPotato-tvOS' do

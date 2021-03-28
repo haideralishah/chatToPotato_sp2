@@ -8,7 +8,6 @@ import React, {
 import {
   View,
   Text,
-  Image,
   StyleSheet,
 } from 'react-native';
 const SplashScreen = () => {
@@ -24,13 +23,13 @@ const SplashScreen = () => {
     <View style={{ flex: 1, backgroundColor: Colors.white, }}>
       {/* logo absolute */}
       <View style={[styles.logo,]}>
-        <View style={{ height: "70%",backgroundColor:"red", justifyContent: "center", }}>
+        <View style={{ height: "70%", justifyContent: "center", }}>
           <Animatable.Image
             direction="alternate-reverse"
             resizeMode="contain"
             animation={fadeIn} iterationCount="infinite"
             source={require("../../assets/PotatoSp.png")}
-            style={{alignItems:"flex-end",justifyContent:"flex-end",width:50,height:50}}
+            style={{alignItems:"flex-end",justifyContent:"flex-end"}}
           />
         </View>
         {/* <View style={{ height: "50%", }}>

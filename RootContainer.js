@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-// import StackNavigation from './src/navigation/StackNavigation';
+import StackNavigation from './src/navigation/StackNavigation';
 import SplashScreen from './src/screens/SplashScreen/index';
 
 const RootContainer = () => {
@@ -19,10 +19,10 @@ const RootContainer = () => {
   // }, 0);
 
   return (
-    // Splash ?
+    Splash ?
       <SplashScreen />
-      // :
-      // <StackNavigation />
+      :
+      <StackNavigation />
   )
 };
 
