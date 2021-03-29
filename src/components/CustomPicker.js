@@ -1,6 +1,9 @@
 import { Picker } from "native-base";
-import { StyleSheet, View } from "react-native";
 import Colors from "../common/Colors"
+import {
+  StyleSheet,
+  View,Platform
+} from "react-native";
 import React,
 {
   useState,
@@ -38,7 +41,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 35,
     backgroundColor: Colors.ligthShade,
-    borderRadius: 3,
+    borderRadius:   ( Platform.OS==="ios"?10: 3),
     justifyContent: "center"
   }
 });

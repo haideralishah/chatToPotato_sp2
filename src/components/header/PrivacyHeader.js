@@ -39,11 +39,14 @@ const PrivacyHeader = ({
 const styles = StyleSheet.create({
     TitleDiv: {
         flexDirection: "row",
-        height: 100,
+        height: 100, 
+        backgroundColor:Colors.white,
     },
     chatToPotato: {
         marginHorizontal: 10,
-        fontSize: 16,
+        fontSize: 20,
+        color:Colors.fontClr,
+        fontWeight:"bold",
         letterSpacing: 0.41,
         fontFamily: "WorkSans-Regular"
     },

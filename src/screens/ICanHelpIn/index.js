@@ -2,9 +2,15 @@ import { connect } from 'react-redux';
 import Colors from "../../common/Colors";
 import HelpButtons from "../../components/helpButton";
 import Header from '../../components/header/isProfile';
-import { _gettopics } from "../../store/action/action";
+import Straper from"../../components/straper"
+import {
+    _gettopics,
+    _CreateProfile
+} from "../../store/action/action";
 import Button from "../../components/button";
-import { Actions } from "react-native-router-flux";
+import {
+    Actions,
+} from "react-native-router-flux";
 import { _error } from "../../store/action/action";
 import React, {
     useState,
@@ -19,8 +25,10 @@ import {
     ImageBackground,
     ActivityIndicator
 } from 'react-native';
-const windowHeight = Dimensions.get('window').height - 24;
-const ICanHelpIn = ({ StoryTitle, isLoader, isError, currentUser, topicList, _error, _gettopics }) => {
+const windowHeight = Dimensions.get('window').height - (Platform.OS==="ios"?0:24);
+const ICanHelpIn = ({ country, StoryTitle, isLoader, isError, edit,
+    _CreateProfile
+    , currentUser, topicList, _error, _gettopics }) => {
     const [Help, setHelp] = useState([])
     useEffect(() => {
         _gettopics(currentUser)
@@ -33,9 +41,12 @@ const ICanHelpIn = ({ StoryTitle, isLoader, isError, currentUser, topicList, _er
             >
                 {/* <HEADER> */}
                 <View style={{ height: "17%" }}>
+                {Platform.OS === "ios" &&
+                        <Straper item={2} />
+                    }
                     <Header
                         isProfile={true}
-                        MidIcon={require("../../assets/Potato.png")}
+                        MidIcon={require("../../assets/PotatoSp.png")}
                         goBack={true} />
                 </View>
                 {/* </HEADER> */}
@@ -87,10 +98,21 @@ const ICanHelpIn = ({ StoryTitle, isLoader, isError, currentUser, topicList, _er
                     <View style={{ width: "85%" }}>
                         {isLoader ?
                             <ActivityIndicator style={{ marginTop: "10%" }} size="small" color={Colors.primary} /> :
-                            <Button name="Continue"
+                            <Button name={edit ? "Save" : "Continue"}
                                 _func={() => {
                                     // Help.length ?
-                                    Actions.MyStruggles({ StoryTitle, Help })
+                                    if (edit) {
+                                        Actions.Profile({ StoryTitle, Help, country })
+                                        _CreateProfile({
+                                            edit,
+                                            Help,
+
+                                        }, currentUser)
+                                    } else {
+                                        country ?
+                                            Actions.MyStruggles({ StoryTitle, Help, country }) :
+                                            Actions.MyStruggles({ StoryTitle, Help })
+                                    }
                                     // :
                                     // _error("Selection is required")
                                 }}
@@ -126,11 +148,11 @@ const styles = StyleSheet.create({
     },
     body: {
         backgroundColor: Colors.white,
+        borderRadius: Platform.OS === "ios" ? 10:3, 
         width: "100%",
         marginTop: "6%",
         borderWidth: 1,
-        borderRadius: 3,
-        borderColor: Colors.shade
+         borderColor: Colors.shade
     },
     helpButtons: {
         marginVertical: "5%",
@@ -154,5 +176,7 @@ const mapDispatchToProp = (dispatch) => ({
         dispatch(_gettopics(currentUser));
 
     },
+    _CreateProfile: (profile, currentUser) => dispatch(_CreateProfile(profile, currentUser)),
+
 })
 export default connect(mapStateToProp, mapDispatchToProp)(ICanHelpIn);

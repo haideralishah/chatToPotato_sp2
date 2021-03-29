@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import Colors from "../../common/Colors";
 import HelpButtons from "../../components/helpButton";
+import Straper from"../../components/straper"
 import { Actions } from "react-native-router-flux";
 import Header from '../../components/header/isProfile';
-import { _error } from '../../store/action/action';
+import { _error, _CreateProfile } from '../../store/action/action';
 import Button from "../../components/button";
 import React, {
     useState
@@ -17,8 +18,8 @@ import {
     ImageBackground,
     ActivityIndicator
 } from 'react-native';
-const windowHeight = Dimensions.get('window').height - 24;
-const MyStruggles = ({ StoryTitle, Help, isLoader, isError, topicList, _error }) => {
+const windowHeight = Dimensions.get('window').height -(Platform.OS==="ios"?0:24);
+const MyStruggles = ({ country, currentUser, _CreateProfile, StoryTitle, edit, Help, isLoader, isError, topicList, _error }) => {
     const [Struggles, setStruggles] = useState([])
     return (
         <ScrollView >
@@ -28,9 +29,12 @@ const MyStruggles = ({ StoryTitle, Help, isLoader, isError, topicList, _error })
             >
                 {/* <HEADER> */}
                 <View style={{ height: "17%" }}>
+                {Platform.OS === "ios" &&
+                        <Straper item={3} />
+                    }
                     <Header
                         isProfile={true}
-                        MidIcon={require("../../assets/Potato.png")}
+                        MidIcon={require("../../assets/PotatoSp.png")}
                         goBack={true} />
                 </View>
                 {/* </HEADER> */}
@@ -89,13 +93,32 @@ const MyStruggles = ({ StoryTitle, Help, isLoader, isError, topicList, _error })
                                 size="small"
                                 color={Colors.primary} /> :
                             <Button
-                                name="Continue"
+                                name={edit ? "Save" : "Continue"}
                                 backgroundColor={Colors.secondary}
                                 fontSize={13}
+                                // _func={() => {
+                                //     Help.length || Struggles.length ?
+                                //         country ? Actions.TellUsMore({ StoryTitle, Help, Struggles, country }) :
+                                //             Actions.TellUsMore({ StoryTitle, Help, Struggles }) :
+                                //         _error("Selection is required")
+                                // }}
                                 _func={() => {
-                                    Help.length || Struggles.length ?
-                                        Actions.TellUsMore({ StoryTitle, Help, Struggles }) :
-                                        _error("Selection is required")
+                                    if (edit) {
+                                        Actions.Profile({ StoryTitle, Help, Struggles, country })
+                                        _CreateProfile({
+                                            edit,
+                                            Struggles
+                                        }, currentUser)
+                                    } else {
+
+                                        (Help.length || Struggles.length) ?
+                                            (country ? Actions.TellUsMore({ StoryTitle, Help, Struggles, country }) :
+                                                Actions.TellUsMore({ StoryTitle, Help, Struggles })) :
+                                            (_error("Selection is required"))
+                                    }
+
+
+
                                 }}
                             />
                         }
@@ -142,6 +165,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProp = ({ root }) => ({
     isLoader: root.isLoader,
+    currentUser: root.currentUser,
     isError: root.isError,
     topicList: root.topicList,
 
@@ -150,5 +174,7 @@ const mapDispatchToProp = (dispatch) => ({
     _error: (errMsg) => {
         dispatch(_error(errMsg));
     },
+    _CreateProfile: (profile, currentUser) => dispatch(_CreateProfile(profile, currentUser)),
+
 })
 export default connect(mapStateToProp, mapDispatchToProp)(MyStruggles);

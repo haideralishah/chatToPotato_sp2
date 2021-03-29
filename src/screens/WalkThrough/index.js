@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Text,
   View,
+  Platform,
   TouchableOpacity,
   Image,
-  Platform
 } from "react-native";
 
 const slides = [
@@ -48,11 +48,12 @@ export default WalkThrough = () => {
         />
         <Image
           style={{ height: 35, width: 50 }}
-          source={require("../../assets/Potato.png")}
+          source={require("../../assets/PotatoSp.png")}
           resizeMode={"contain"}
         />
         <Text style={styles.ChatToAPotato}>Chat to a Potato</Text>
       </View>
+
 
       <View style={{ flex: 6.5, }}>
         <ImageSlider
@@ -95,9 +96,10 @@ export default WalkThrough = () => {
             resizeMode={"contain"}
           />
         </View>
-        {
+        
+         {
           Platform.OS === "ios" ?
-            <TouchableOpacity onPress={() => Actions.SignIn()}
+            <TouchableOpacity onPress={()=>Actions.SignIn()}
               activeOpacity={0.8}
               style={
                 [styles.buttonDiv,]}>
@@ -156,13 +158,6 @@ const styles = StyleSheet.create({
     fontSize: 21,
     letterSpacing: 1.35,
   },
-  // ios
-  buttonText: {
-    fontFamily: "WorkSans-SemiBold",
-    fontSize: 16,
-    color: '#ffffff',
-    letterSpacing: 1
-  },
   buttonDiv: {
     justifyContent: "center",
     alignItems: "center",
@@ -173,5 +168,11 @@ const styles = StyleSheet.create({
     borderTopRightRadius:25,
     borderBottomRightRadius:25,
     width: "45%"
-  }
+  },
+  buttonText: {
+    fontFamily: "WorkSans-SemiBold",
+    fontSize: 16,
+    color: '#ffffff',
+    letterSpacing: 1
+  },
 });

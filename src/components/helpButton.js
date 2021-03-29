@@ -19,16 +19,22 @@ const HelpButtons = (
         selectedBgColor,
         unSelectedColor,
         selectedColor,
-        _func
+        _func,
+        width,
+        borderRadius
     }) => {
     const [isSelected, setIsSelected] = useState(false);
+    console.log(title,"title")
     return (
         <TouchableOpacity onPress={() => {
             setIsSelected(!isSelected);
             _func(title, index);
         }}
             style={[styles.item,
-            { backgroundColor: isSelected ? selectedBgColor : unSelectedBgColor, }
+            {
+                backgroundColor: isSelected ? selectedBgColor : unSelectedBgColor,
+                borderRadius: borderRadius ? borderRadius : Platform.OS === "ios" ? 10:3                ,
+            }
             ]}>
             {isSelected &&
                 <View style={styles.checkView}>
@@ -51,14 +57,16 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 3,
         marginVertical: 5,
         marginHorizontal: 5,
     },
     title: {
         fontFamily: "WorkSans-SemiBold",
+        padding:"5%",
         fontSize: 12,
-        letterSpacing: 0.31, margin: "6%"
+        letterSpacing: 0.31,
+        
+        //  margin: "6%"
     },
     checkFont: {
         height: 14,
@@ -77,5 +85,4 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start"
     }
 });
-
 export default HelpButtons;

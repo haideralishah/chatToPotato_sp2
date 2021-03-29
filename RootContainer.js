@@ -4,21 +4,17 @@ import StackNavigation from './src/navigation/StackNavigation';
 import SplashScreen from './src/screens/SplashScreen/index';
 
 const RootContainer = () => {
-  // const [Splash, setSplash] = useState(true);
-  const [Splash, setSplash] = useState(false);
+  const [Splash, setSplash] = useState(true);
 
   useEffect(() => {
     console.disableYellowBox = true
-
-    
-
-  }, []);
-
-  // setTimeout(() => {
-    // setSplash(false)
-  // }, 0);
+    setTimeout(() => {
+      setSplash(false)
+    }, 0);
+  }, [])
 
   return (
+
     Splash ?
       <SplashScreen />
       :

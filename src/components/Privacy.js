@@ -1,6 +1,5 @@
 import Colors from '../common/Colors';
 import Entypo from "react-native-vector-icons/Entypo";
-import { WebView } from 'react-native-webview';
 import { Actions } from "react-native-router-flux";
 import React,
 {
@@ -15,24 +14,29 @@ import {
 } from 'react-native';
 const Privacy = ({ title }) => {
     const [isEnabled, setIsEnabled] = useState(true);
+    const RouteChanger = () => {
+        if (title == "Privacy Policy") {
+            Actions.PrivacySceen()
+        } else if (title == "Trems & Conditions") {
+            Actions.TermsAndCondition()
+        } else if (title == "Reset Password") {
+            Actions.ResetPassword()
+        }
+    }
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     return (
-        <View style={styles.item}>
+        <View style={styles.item}
+            activeOpacity={0.8}
+        >
             <TouchableOpacity
                 style={{ justifyContent: "center", width: "85%", height: "100%" }}
-                onPress={() => {
-                    {
-                        title == "Privacy Policy" &&
-                            Actions.PrivacySceen()
-                    }
-                    {
-                        title == "Trems & Conditions" &&
-                            Actions.TermsAndCondition()
-                    }
-                }}>
+                onPress={RouteChanger}
+            >
                 <Text style={styles.title}>{title}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.arrow}>
+            <TouchableOpacity style={styles.arrow}
+                onPress={RouteChanger}
+            >
                 {title != "Notificaions" ?
                     <Entypo
                         name="chevron-small-right"

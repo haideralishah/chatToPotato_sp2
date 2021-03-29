@@ -18,14 +18,15 @@ import {
   TouchableOpacity,
   ImageBackground,
   StyleSheet,
+  Platform,
   ScrollView,
   BackHandler,
   ActivityIndicator
 } from 'react-native';
-const height = Dimensions.get('window').height - 24;
+const height = Dimensions.get('window').height - (Platform.OS==="ios"?0:24);
 const SignIn = ({ prevScreen, isLoader, isError, _login }) => {
   const [passwordShow, setPasswordShow] = useState(false);
-  const [email, setEmail] = useState('zeshan@gmail.com');
+  const [email, setEmail] = useState('fatma@gmail.com');
   // const [email, setEmail] = useState('');
   const [pass, setPass] = useState('12345678');
   // const [pass, setPass] = useState('');
@@ -64,7 +65,7 @@ const SignIn = ({ prevScreen, isLoader, isError, _login }) => {
           <View style={{ alignItems: "center", }}>
             <FastImage
               style={{ height: 50, width: 80, }}
-              source={require("../../assets/Potato.png")}
+              source={require("../../assets/PotatoSp.png")}
               resizeMode={FastImage.resizeMode.stretch}
             />
             <Text
@@ -101,7 +102,9 @@ const SignIn = ({ prevScreen, isLoader, isError, _login }) => {
                 </View>
                 <View style={
                   [styles.inputFieldPass,
-                  { borderColor: passBrdClr, borderWidth: passBrdWidth }
+                  { borderColor: passBrdClr, borderWidth: passBrdWidth,
+    borderRadius: Platform.OS==="ios"?10: 2,
+  }
                   ]}>
                   <View style={{ width: "90%" }}>
                     <InputForms
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
   },
   InputMainDiv: {
     backgroundColor: Colors.white,
-    borderRadius: 2,
+    borderRadius: Platform.OS==="ios"?15: 2,
     padding: 15,
   },
   InputUserName: {

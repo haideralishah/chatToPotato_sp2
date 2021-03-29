@@ -5,13 +5,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Entypo from "react-native-vector-icons/Entypo";
 import { Actions } from "react-native-router-flux";
+import { connect } from 'react-redux';
+import { _Logout} from "../store/action/action";
 import {
     Text,
     TouchableOpacity,
     View,
     StyleSheet
 } from 'react-native';
-const AboutUs = ({ title }) => {
+const AboutUs = ({ title,_Logout,currentUser}) => {
     return (
         <TouchableOpacity
             style={styles.item}
@@ -28,6 +30,10 @@ const AboutUs = ({ title }) => {
                 {
                     title == "How to Chat" &&
                         Actions.HowToChatScreen()
+                }
+                {
+                    title == "Logout" &&
+                    _Logout(currentUser)
                 }
             }} >
             <View style={styles.icons}>
@@ -95,4 +101,13 @@ const styles = StyleSheet.create({
         width: "10%"
     },
 });
-export default AboutUs;
+const mapStateToProp = ({ root }) => ({
+    currentUser: root.currentUser,
+})
+const mapDispatchToProp = (dispatch) => ({
+    _Logout: (currentUser) => {
+        dispatch(_Logout(currentUser));
+    },
+    
+})
+export default connect(mapStateToProp, mapDispatchToProp)(AboutUs);

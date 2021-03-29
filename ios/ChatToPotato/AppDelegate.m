@@ -30,7 +30,10 @@ static void InitializeFlipper(UIApplication *application) {
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
-
+  if (@available(iOS 14, *)) {
+    UIDatePicker *picker = [UIDatePicker appearance];
+    picker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+  }
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"ChatToPotato"
@@ -47,6 +50,11 @@ static void InitializeFlipper(UIApplication *application) {
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+
+
+
+
+
 {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];

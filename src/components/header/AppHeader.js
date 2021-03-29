@@ -19,7 +19,7 @@ const AppHeader = ({
 
 }) => {
     return (
-        <View style={{ flex: 1.3, flexDirection: "row" }}>
+        <View style={{ flex: 1.3, flexDirection: "row" ,backgroundColor:Colors.white}}>
             <View style={{ flex: 2.2, justifyContent: "center", alignItems: "center" }}>
                 < FastImage
                     style={{ height: 35, width: 50, }}

@@ -1,7 +1,7 @@
 import Colors from "../common/Colors";
 import IsHelpSelected from "../components/header/isHelpSelected";
 import Octicons from "react-native-vector-icons/Octicons";
-import { _gettopics } from "../store/action/action";
+import { _gettopics, fltrProfesion } from "../store/action/action";
 import { connect } from 'react-redux';
 import { Actions } from "react-native-router-flux";
 import React, {
@@ -15,13 +15,16 @@ import {
     StyleSheet,
     View
 } from 'react-native';
-const Item = ({ title }) => {
-    const [isSelected, setIsSelected] = useState(false)
-
+const Item = ({ title, func }) => {
+    const [isSelected, setIsSelected] = useState(false);
     return (
         < TouchableOpacity
             style={[styles.item, { backgroundColor: isSelected ? Colors.primary : Colors.white }]}
-            onPress={() => { setIsSelected(!isSelected) }}>
+            onPress={() => {
+                setIsSelected(!isSelected);
+                func(title);
+
+            }}>
             <Text
                 style={[styles.title,
                 { color: isSelected ? Colors.white : Colors.fontClr }
@@ -39,17 +42,31 @@ const Item = ({ title }) => {
         </TouchableOpacity>
     )
 };
-const HelpSelection = ({ currentUser, topicList, _gettopics }) => {
+const HelpSelection = ({ radio, currentUser, topicList, _gettopics, freePotatoes, fltrProfesion }) => {
+    const [array, setarray] = useState([]);
+
     useEffect(() => {
         _gettopics(currentUser)
     }, [])
     const renderItem = ({ item }) => (
-        <Item title={item} />
+        <Item title={item}
+            func={(el) => {
+                var i = array.indexOf(el);
+                var arrayClone = array
+                if (i !== -1) {
+                    arrayClone.splice(i, 1,);
+                }
+                else {
+                    arrayClone.push(el);
+                }
+                setarray(arrayClone)
+
+            }} />
     );
     return (
-        <View>
+        <View style={{ backgroundColor: Colors.white }}>
             <View style={{ height: '10%', alignItems: "center" }}>
-                <IsHelpSelected />
+                <IsHelpSelected radio={radio} />
             </View>
 
             <View style={{ height: '80%', justifyContent: 'center', alignItems: 'center' }}>
@@ -72,7 +89,12 @@ const HelpSelection = ({ currentUser, topicList, _gettopics }) => {
                             style={{ color: Colors.primary, fontWeight: "bold", letterSpacing: 1 }}>Cancel
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.doneBtn}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            array.length > 0 ? fltrProfesion(array, freePotatoes, radio)
+                                : Actions.Home()
+                        }}
+                        style={styles.doneBtn}>
                         <Text
                             style={{ color: Colors.primary, fontWeight: "bold", letterSpacing: 1 }}>Done
                          </Text>
@@ -138,6 +160,8 @@ const styles = StyleSheet.create({
 const mapStateToProp = ({ root }) => ({
     currentUser: root.currentUser,
     topicList: root.topicList,
+    freePotatoes: root.freePotatoes,
+
 
 })
 const mapDispatchToProp = (dispatch) => ({
@@ -146,6 +170,10 @@ const mapDispatchToProp = (dispatch) => ({
     },
     _gettopics: (currentUser) => {
         dispatch(_gettopics(currentUser));
+
+    },
+    fltrProfesion: (array, freePotatoes, radio) => {
+        dispatch(fltrProfesion(array, freePotatoes, radio));
 
     },
 })

@@ -9,10 +9,13 @@ import {
     View
 } from 'react-native';
 
-const IsHelpSelected = () => {
+const IsHelpSelected = ({radio}) => {
     return (
         <View style={styles.container}>
-            <Text style={{ fontSize: 24, fontFamily: "WorkSans-SemiBold" }}>I can help in</Text>
+            {
+                radio === "I need help" ? < Text style={{fontSize: 24, fontFamily: "WorkSans-SemiBold"}}>I need help in</Text>
+                  : < Text style={{fontSize: 24, fontFamily: "WorkSans-SemiBold"}}> I can help in</Text>
+              }
             <TouchableOpacity
                 onPress={() => Actions.pop()} >
                     <AntDesign
@@ -23,7 +26,6 @@ const IsHelpSelected = () => {
         </View>
     )
 };
-
 const styles = StyleSheet.create({
     container: {
         width: "90%",

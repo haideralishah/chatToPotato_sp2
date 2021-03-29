@@ -39,6 +39,7 @@ export default StyleSheet.create({
       INeedContainer: {
         borderColor: Colors.shade,
         borderWidth: 1,
+        borderRadius: Platform.OS==="ios"?10: 0,
         height: 50,
         flexDirection: "row",
         backgroundColor:Colors.white,

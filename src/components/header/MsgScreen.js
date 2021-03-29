@@ -16,7 +16,7 @@ const MsgScreen = ({
             <View style={{ flex: 2.2, justifyContent: "center", alignItems: "center" }}>
                 < FastImage
                     style={{ height: 35, width: 50, }}
-                    source={require("../../assets/Potato.png")}
+                    source={require("../../assets/PotatoSp.png")}
                     resizeMode="contain"
                 />
             </View>

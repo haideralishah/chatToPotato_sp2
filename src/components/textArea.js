@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: "100%",
         borderWidth: 1,
+        borderRadius:(Platform.OS==="ios"?10:0),
         backgroundColor: Colors.white,
         padding: 10
     }

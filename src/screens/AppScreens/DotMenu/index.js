@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import AppContainer from '../../../container/AppContainer';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet ,ImageBackground} from 'react-native';
 import Colors from "../../../common/Colors";
 import { Actions } from "react-native-router-flux";
 import AboutUs from "../../../components/aboutUs"
@@ -28,8 +28,11 @@ const DotMenu = ({ }) => {
     < AboutUs title={item.title} />
   );
   return (
-    <AppContainer route={"DotMenu"} _func={() => Actions.SettingScreen()} SearchIcon={true} iconName={"settings-outline"} firstImg={require("../../../assets/Potato.png")} drawerProps={true} heading={"Chat to a Potato"} >
-      <View style={{ flex: 6, alignItems: "center" }}>
+    <AppContainer route={"DotMenu"} _func={() => Actions.SettingScreen()} SearchIcon={true} iconName={"settings-outline"} firstImg={require("../../../assets/PotatoSp.png")} drawerProps={true} heading={"Chat to a Potato"} >
+ <ImageBackground
+          style={{ flex: 6, backgroundColor: Colors.white,  alignItems: "center" }}
+          source={require("../../../assets/bevelBG.png")}
+        > 
         <View style={styles.body}>
           <FlatList
             data={DATA}
@@ -37,7 +40,7 @@ const DotMenu = ({ }) => {
             keyExtractor={item => item.id}
           />
         </View>
-      </View>
+      </ImageBackground>
     </AppContainer >
   )
 };

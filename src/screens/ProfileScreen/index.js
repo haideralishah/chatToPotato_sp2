@@ -5,6 +5,7 @@ import Header from '../../components/header/isProfile';
 import Button from "../../components/button";
 import { _error } from "../../store/action/action";
 import Entypo from "react-native-vector-icons/Entypo";
+import Straper from "../../components/straper"
 import { Actions } from "react-native-router-flux";
 import React, {
     useState
@@ -19,8 +20,8 @@ import {
     ImageBackground,
     ActivityIndicator
 } from 'react-native';
-const windowHeight = Dimensions.get('window').height - 24;
-const ProfileScreen = ({ isError, isLoader, _error }) => {
+const windowHeight = Dimensions.get('window').height - (Platform.OS === "ios" ? 0 : 24);
+const ProfileScreen = ({ isError, isLoader, _error, country }) => {
     const [StoryTitle, setStoryTitle] = useState("");
     return (
         <ScrollView >
@@ -30,9 +31,12 @@ const ProfileScreen = ({ isError, isLoader, _error }) => {
             >
                 {/* <HEADER> */}
                 <View style={{ height: "17%" }}>
+                    {Platform.OS === "ios" &&
+                        <Straper item={1} />
+                    }
                     <Header
                         isProfile={true}
-                        MidIcon={require("../../assets/Potato.png")}
+                        MidIcon={require("../../assets/PotatoSp.png")}
                         goBack={true} />
                 </View>
                 {/* </HEADER> */}
@@ -99,8 +103,11 @@ const ProfileScreen = ({ isError, isLoader, _error }) => {
                                 fontSize={13}
                                 _func={() => {
                                     !StoryTitle ? _error("story is required") :
-                                        Actions.ICanHelpIn({ StoryTitle })
+                                        country ?
+                                            Actions.ICanHelpIn({ StoryTitle, country }) :
+                                            Actions.ICanHelpIn({ StoryTitle })
                                 }}
+
                             />}
                         {isError !== "" &&
                             <Text
@@ -142,7 +149,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         justifyContent: "space-evenly",
         alignItems: "center",
-        borderRadius: 3,
+        borderRadius: Platform.OS === "ios" ? 10 : 3,
         width: "95%",
         height: "85%",
         backgroundColor: Colors.white

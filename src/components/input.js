@@ -1,4 +1,4 @@
-import { TextInput } from 'react-native';
+import { TextInput,Platform } from 'react-native';
 import Colors from "../common/Colors"
 import React,
 {
@@ -11,7 +11,9 @@ const CustomPicker = (
     passwordShow,
     SignInScreen,
     placeHolder,
+    backgroundColor,
     _func,
+    defVal,
     _bdrWidth }) => {
   const [form, onChangeText] = useState();
   const [borderColor, setBorderColor] = useState(Colors.shade);
@@ -45,15 +47,16 @@ const CustomPicker = (
     <TextInput
       onBlur={() => onBlur()}
       onFocus={() => onFocus()}
+      defaultValue={defVal}
       style={{
         height: SignInScreen ? 45 : 35,
         borderColor: borderColor,
         fontSize: SignInScreen ? 14 : 11,
-        backgroundColor: Colors.ligthShade,
+        backgroundColor: backgroundColor ? backgroundColor : Colors.ligthShade,
         padding: 10,
         // ********because password input has fustom eye icon
         borderWidth: placeHolder === "Password" ? 0 : borderWidth,
-        borderRadius: borderRadius ? borderRadius : 3
+        borderRadius: borderRadius ? borderRadius : ( Platform.OS==="ios"?10: 3)
       }}
       maxLength={maxLength}
       onChangeText={(text) => _func(text)}

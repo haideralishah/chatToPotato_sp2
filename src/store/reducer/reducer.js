@@ -4,8 +4,13 @@ const INITIAL_STATE = {
     isError: "",
     topicList: [],
     currentUser: [],
+    getReviews: [],
     freePotatoes: [],
     forgetpass: [],
+    blockchat: [],
+    allConversation: [],
+    reviews: [],
+    singleMsgs: [],
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -39,6 +44,31 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 isError: action.payload
+            })
+        case ActionTypes.ALLCONVERSATION:
+            return ({
+                ...state,
+                allConversation: action.payload
+            })
+        case ActionTypes.SINGLEMSGS:
+            return ({
+                ...state,
+                singleMsgs: action.payload
+            })
+        case ActionTypes.REVIEWS:
+            return ({
+                ...state,
+                reviews: action.payload
+            })
+        case ActionTypes.BLOCKCHAT:
+            return ({
+                ...state,
+                blockchat: action.payload
+            })
+        case ActionTypes.GETREVIEWS:
+            return ({
+                ...state,
+                getReviews: action.payload
             })
         default:
             return state;

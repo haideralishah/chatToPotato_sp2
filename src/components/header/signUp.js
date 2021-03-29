@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     Title: {
         fontSize: 23,
         color: Colors.fontClr,
-        fontFamily: "WorkSans-Regular",
+        fontFamily: "WorkSans-SemiBold",
         letterSpacing: 1.3,
     },
 });

@@ -1,22 +1,45 @@
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import FastImage from 'react-native-fast-image';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
-import HelpButtons from "../components/helpButton"
 import Colors from '../common/Colors';
+import {
+    _getChatIdentifier
+} from "../store/action/action"
+import {
+    connect
+} from 'react-redux';
 import React,
 {
-    useState
+    useState,
+    useEffect
 } from "react";
-import {
-    FlatList,
+import { 
     Text,
     StyleSheet,
     View,
     TouchableOpacity
 } from 'react-native';
-
-
-const PotatoCart = ({ potato, radio }) => {
+const PotatoCart = ({ potato,
+    radio,
+    currentUser,
+    _getChatIdentifier, 
+    blockStatus,
+}) => { 
+    const [ratingAvgratingAvg, setratingAvgratingAvg] = useState("");
+    const [numberOfReviews, setnumberOfReviews] = useState(0);
+    useEffect(() => {
+        if (potato.reviews.length > 0) {
+            class shopRatingCollection extends Array {
+                sum(key) {
+                    return this.reduce((a, b) => Number(a) + Number((b[key] || 0)), 0);
+                }
+            }
+            const traveler = new shopRatingCollection(...potato.reviews);
+            let sumOfRating = traveler.sum("rating");
+            setnumberOfReviews(potato.reviews.length)
+            setratingAvgratingAvg(sumOfRating / potato.reviews.length);
+        }
+    }, [])
     const {
         first_name,
         last_name,
@@ -24,17 +47,24 @@ const PotatoCart = ({ potato, radio }) => {
         can_help_in,
         helpful_moto,
         struggles,
+        current_problem,
+        id,
+        status,
+        avatar_url,
     } = potato;
+    console.log(potato,"12345678")
     return (
         <View style={styles.cartContainer}>
             <View style={styles.cartBorder}>
                 <View style={{ flex: 4.8, flexDirection: "row" }}>
                     <View style={{ flex: 2.2, justifyContent: "center", }}>
-                        < FastImage
-                            style={{ height: 60, width: 60, }}
-                            source={require("../assets/profilePic.png")}
-                            resizeMode="contain"
-                        />
+                        <View style={{ height: 60, width: 60, borderRadius: 30, overflow: "hidden" }}>
+                            < FastImage
+                                style={{ height: "100%", width: "100%", }}
+                                source={{ uri: avatar_url }}
+                                resizeMode="contain"
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 5, justifyContent: "center", }}>
                         <Text
@@ -44,34 +74,77 @@ const PotatoCart = ({ potato, radio }) => {
                             style={styles.story}>{story}
                         </Text>
                         <View style={{ flexDirection: "row", }}>
-                            <View style={{ flex: 4, }}>
-                                <FlatList
-                                    style={{ flexDirection: "row", }}
-                                    horizontal={true}
-                                    data={[1, 2, 3, 4, 5]}
-                                    renderItem={({ item }) => (
-                                        // rate.star >= item ?
-                                        <FontAwesome
-                                            name={"star-o"}
-                                            size={13}
-                                            style={{ color: "orange" }}
-                                        />
-                                        // : <FontAwesome name={"star-o"} size={17} style={{ color: "orange" }} />
-                                    )}
-                                    keyExtractor={item => item.toString()}
-                                />
+                            <View style={{ flex: 4, flexDirection: "row" }}>
+                                {ratingAvgratingAvg >= 1 ?
+                                    <FontAwesome
+                                        name="star"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    /> :
+                                    <FontAwesome
+                                        name="star-o"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    />
+                                }
+                                {ratingAvgratingAvg >= 2 ?
+                                    <FontAwesome
+                                        name="star"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    /> :
+                                    <FontAwesome
+                                        name="star-o"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    />
+                                }
+                                {ratingAvgratingAvg >= 3 ?
+                                    <FontAwesome
+                                        name="star"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    /> :
+                                    <FontAwesome
+                                        name="star-o"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    />
+                                }
+                                {ratingAvgratingAvg >= 4 ?
+                                    <FontAwesome
+                                        name="star"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    /> :
+                                    <FontAwesome
+                                        name="star-o"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    />
+                                }
+                                {ratingAvgratingAvg >= 5 ?
+                                    <FontAwesome
+                                        name="star"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    /> :
+                                    <FontAwesome
+                                        name="star-o"
+                                        style={{ color: Colors.secondary, fontSize: 13 }}
+                                    />
+                                }
                             </View>
                             <View style={{ flex: 6, }}>
-                                {/* <Text style={styles.reviewCount}>4.8(86 reviews)</Text> */}
                                 <Text
-                                    style={styles.reviewCount}>No reviews yet
+                                    style={styles.reviewCount}>{numberOfReviews > 0 ? "(" + numberOfReviews + ")" : "no reviews yet"}
                                 </Text>
                             </View>
                         </View>
 
                     </View>
                     <View style={{ flex: 2.8, justifyContent: "space-evenly", alignItems: "flex-end" }}>
-                        <TouchableOpacity style={styles.chatBtn}>
+                        <TouchableOpacity
+                            onPress={() => _getChatIdentifier(currentUser,
+                                id,
+                                first_name,
+                                last_name,
+                                blockStatus,
+                                avatar_url,
+                                status,
+                                story)}
+                            style={styles.chatBtn}>
                             <Text
                                 style={styles.chatNow}>Chat now
                              </Text>
@@ -129,12 +202,11 @@ const PotatoCart = ({ potato, radio }) => {
                             }
                         </View>
                         <View style={{ backgroundColor: "orange", justifyContent: "center", alignItems: "center" }}>
-                            {/* <Text style={styles.others}>+7 others</Text> */}
                         </View>
                     </View>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                         <Text
-                            style={styles.moto}>{helpful_moto}
+                            style={styles.moto}>{radio === "I need help" ? helpful_moto : current_problem}
                         </Text>
                     </View>
                 </View>
@@ -144,14 +216,15 @@ const PotatoCart = ({ potato, radio }) => {
 }
 const styles = StyleSheet.create({
     cartContainer: {
-        // backgroundColor: "red",
         height: 220,
         justifyContent: "flex-end",
     },
     cartBorder: {
         borderColor: Colors.shade,
         borderWidth: 1,
-        height: 200, paddingHorizontal: "3%",
+        height: 200, 
+        borderRadius: Platform.OS==="ios"?10: 0,
+        paddingHorizontal: "3%",
         backgroundColor: Colors.white,
     },
     userName: {
@@ -178,7 +251,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: 30,
         width: "90%",
-        borderRadius: 2,
+        // borderRadius: 2,
+    borderRadius: Platform.OS==="ios"?15: 2,
+
     },
     chatNow: {
         fontFamily: "WorkSans-SemiBold",
@@ -197,19 +272,19 @@ const styles = StyleSheet.create({
         letterSpacing: 0.31,
         color: Colors.primary
     },
-    item: {
-        height: 40,
+    item: { 
         backgroundColor: "#E4F1FF",
         justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 3,
+        alignItems: "center", 
+    borderRadius: Platform.OS==="ios"?10: 3,
+padding:"5%",
         marginVertical: 5,
         marginHorizontal: 5,
     },
     title: {
         fontFamily: "WorkSans-SemiBold",
         fontSize: 12,
-        letterSpacing: 0.31, margin: "5%"
+        letterSpacing: 0.31,  
     },
     moto: {
         fontFamily: "WorkSans-Regular",
@@ -219,4 +294,28 @@ const styles = StyleSheet.create({
         width: "90%"
     },
 });
-export default PotatoCart;
+const mapStateToProp = ({ root }) => ({
+    currentUser: root.currentUser,
+    getReviews: root.getReviews
+})
+const mapDispatchToProp = (dispatch) => ({
+    _getChatIdentifier: (currentUser,
+        id,
+        first_name,
+        last_name,
+        blockStatus,
+        avatar_url,
+        status,
+        story) => {
+        dispatch(_getChatIdentifier(currentUser,
+            id,
+            first_name,
+            last_name,
+            blockStatus,
+            avatar_url,
+            status,
+            story));
+    },
+
+})
+export default connect(mapStateToProp, mapDispatchToProp)(PotatoCart);

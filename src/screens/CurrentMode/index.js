@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import Colors from "../../common/Colors";
+import Straper from"../../components/straper"
 import Header from '../../components/header/isProfile';
 import TextArea from "../../components/textArea";
 import Button from "../../components/button";
@@ -33,6 +34,7 @@ const DATA = [
     },
 ];
 const CurrentMode = ({
+    country,
     StoryTitle,
     Help,
     Struggles,
@@ -54,9 +56,12 @@ const CurrentMode = ({
             >
                 {/* <HEADER> */}
                 <View style={{ height: "17%" }}>
+                {Platform.OS === "ios" &&
+                        <Straper item={5} />
+                    }
                     <Header
                         isProfile={true}
-                        MidIcon={require("../../assets/Potato.png")}
+                        MidIcon={require("../../assets/PotatoSp.png")}
                         goBack={true} />
                 </View>
                 {/* </HEADER> */}
@@ -113,17 +118,31 @@ const CurrentMode = ({
                                 backgroundColor={Colors.secondary}
                                 fontSize={13}
                                 _func={() => {
-                                    Mode ?
-                                        _CreateProfile({
-                                            StoryTitle,
-                                            Help,
-                                            Struggles,
-                                            Description,
-                                            CurrentProblems,
-                                            Helpfulmotto,
-                                            Mode,
-                                        }, currentUser) :
-                                        _error(`Current Mode is required`);
+                                    (Mode) ?
+
+                                        (
+                                            country ?
+                                                _CreateProfile({
+                                                    country,
+                                                    StoryTitle,
+                                                    Help,
+                                                    Struggles,
+                                                    Description,
+                                                    CurrentProblems,
+                                                    Helpfulmotto,
+                                                    Mode,
+                                                }, currentUser) :
+                                                _CreateProfile({
+                                                    StoryTitle,
+                                                    Help,
+                                                    Struggles,
+                                                    Description,
+                                                    CurrentProblems,
+                                                    Helpfulmotto,
+                                                    Mode,
+                                                }, currentUser))
+                                        :
+                                        (_error(`Current Mode is required`));
                                 }}
                             />
                         }

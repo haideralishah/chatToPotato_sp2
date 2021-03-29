@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import AppContainer from '../../../container/AppContainer';
 import PotatoCart from '../../../components/PotatoCart';
@@ -8,8 +8,26 @@ import Entypo from "react-native-vector-icons/Entypo"
 import styles from './style'
 import { Actions } from 'react-native-router-flux'
 import { Text, Switch, SafeAreaView, TouchableOpacity, View, ImageBackground, ScrollView, FlatList } from 'react-native';
+const Home = ({ freePotatoes, allConversation, updatedPotatoes }) => {
+  let ratingAvgratingAvg;
+  useEffect(() => {
+    ratingAvg()
+  }, [])
 
-const Home = ({ freePotatoes }) => {
+  const ratingAvg = () => {
+    freePotatoes.map((data) => {
+      if (data.reviews.length > 0) {
+        class shopRatingCollection extends Array {
+          sum(key) {
+            return this.reduce((a, b) => Number(a) + Number((b[key] || 0)), 0);
+          }
+        }
+        const traveler = new shopRatingCollection(...data.reviews);
+        const sumOfRating = traveler.sum("rating");
+        ratingAvgratingAvg = sumOfRating / data.reviews.length;
+      }
+    })
+  }
   const [radio, setradio] = useState("I need help");
   const [isEnabled, setIsEnabled] = useState(true);
   // data for radio buttons
@@ -17,11 +35,9 @@ const Home = ({ freePotatoes }) => {
     { label: 'I need help', value: 'I need help' },
     { label: 'I want to help', value: "I want to help" }
   ];
-
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
   return (
-    <AppContainer route={"Home"} secondImg={require("../../../assets/filter.png")} firstImg={require("../../../assets/Potato.png")} drawerProps={true} heading={"Chat to a Potato"} >
+    <AppContainer route={"Home"} secondImg={require("../../../assets/filter.png")} firstImg={require("../../../assets/PotatoSp.png")} drawerProps={true} heading={"Chat to a Potato"} >
       {/* body */}
       <ImageBackground
         //  resizeMode="contain"
@@ -67,7 +83,7 @@ const Home = ({ freePotatoes }) => {
               />
             </View>
 
-            <TouchableOpacity onPress={() => Actions.HelpSelection()}
+            <TouchableOpacity onPress={() => Actions.HelpSelection({ radio })}
               activeOpacity={0.7}
               style={styles.INeedContainer}>
               {
@@ -76,18 +92,24 @@ const Home = ({ freePotatoes }) => {
               }
               <Entypo name="chevron-small-right" style={{ color: Colors.fontClr, fontSize: 25 }} />
             </TouchableOpacity>
-            {freePotatoes.length > 0 && <FlatList
-            //  onEndReachedThreshold={0.4}
-            //  onEndReached={info => {
-            //    alert()
-            //  }}
-              data={freePotatoes}
-              renderItem={({ item }) => (
-                <PotatoCart potato={item} radio={radio} />
-              )}
-              keyExtractor={(item, index) => String(index)}
-            />}
-
+            {updatedPotatoes ?
+              <FlatList
+                data={updatedPotatoes}
+                renderItem={({ item }) => (
+                  <PotatoCart potato={item} radio={radio} blockStatus={item.blocked} />
+                )}
+                keyExtractor={(item, index) => String(index)}
+              />
+              :
+              freePotatoes.length > 0 &&
+              <FlatList
+                data={freePotatoes}
+                renderItem={({ item }) => (
+                  <PotatoCart potato={item} radio={radio} blockStatus={item.blocked} />
+                )}
+                keyExtractor={(item, index) => String(index)}
+              />
+            }
           </ScrollView>
         </SafeAreaView>
 
@@ -97,7 +119,7 @@ const Home = ({ freePotatoes }) => {
 };
 const mapStateToProp = ({ root }) => ({
   freePotatoes: root.freePotatoes,
-
+  allConversation: root.allConversation,
 
 })
 const mapDispatchToProp = (dispatch) => ({

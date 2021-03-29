@@ -23,7 +23,7 @@ const SplashScreen = () => {
     <View style={{ flex: 1, backgroundColor: Colors.white, }}>
       {/* logo absolute */}
       <View style={[styles.logo,]}>
-        <View style={{ height: "70%", justifyContent: "center", }}>
+        <View style={{ height: "75%", justifyContent: "center", }}>
           <Animatable.Image
             direction="alternate-reverse"
             resizeMode="contain"

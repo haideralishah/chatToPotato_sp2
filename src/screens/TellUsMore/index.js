@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import Straper from"../../components/straper";
 import Colors from "../../common/Colors";
 import Header from '../../components/header/isProfile';
 import { Actions } from "react-native-router-flux";
@@ -21,13 +22,14 @@ import {
     ImageBackground,
     ActivityIndicator
 } from 'react-native';
-const windowHeight = Dimensions.get('window').height - 24;
+const windowHeight = Dimensions.get('window').height - (Platform.OS==="ios"?0:24);
 const DATA = [
     { title: "Description", data: [{ height: 100, label: "Description" }] },
     { title: "Current Problems", data: [{ height: 100, label: "Current Problems" }] },
     { title: "Helpful motto", data: [{ height: 50, label: "Helpful motto" }] },
 ];
 const TellUsMore = ({
+    country,
     StoryTitle,
     Help,
     Struggles,
@@ -48,9 +50,12 @@ const TellUsMore = ({
             >
                 {/* <HEADER> */}
                 <View style={{ height: "17%" }}>
+                {Platform.OS === "ios" &&
+                        <Straper item={4} />
+                    }
                     <Header
                         isProfile={true}
-                        MidIcon={require("../../assets/Potato.png")}
+                        MidIcon={require("../../assets/PotatoSp.png")}
                         goBack={true} />
                 </View>
                 {/* </HEADER> */}
@@ -64,7 +69,8 @@ const TellUsMore = ({
                             sections={DATA}
                             keyExtractor={(item, index) => item + index}
                             renderItem={({ item }) => (
-                                <TextArea item={item}
+                                <TextArea  
+                                item={item}
                                     _func={(text, label) => {
                                         var TxtAreaClone = TxtArea;
                                         TxtAreaClone[label] = text;
@@ -93,13 +99,21 @@ const TellUsMore = ({
                                 _func={() => {
                                     _checkIsEmptyObj(TxtArea) ?
                                         _error(`${_checkIsEmptyObj(TxtArea)} is required`) :
-                                        Actions.CurrentMode({
-                                            StoryTitle, Help,
-                                            Struggles,
-                                            Description: TxtArea.Description,
-                                            CurrentProblems: TxtArea["Current Problems"],
-                                            Helpfulmotto: TxtArea["Helpful motto"],
-                                        })
+                                        country ?
+                                            Actions.CurrentMode({
+                                                StoryTitle, Help,
+                                                Struggles, country,
+                                                Description: TxtArea.Description,
+                                                CurrentProblems: TxtArea["Current Problems"],
+                                                Helpfulmotto: TxtArea["Helpful motto"],
+                                            }) :
+                                            Actions.CurrentMode({
+                                                StoryTitle, Help,
+                                                Struggles,
+                                                Description: TxtArea.Description,
+                                                CurrentProblems: TxtArea["Current Problems"],
+                                                Helpfulmotto: TxtArea["Helpful motto"],
+                                            })
                                 }}
                             />
                         }

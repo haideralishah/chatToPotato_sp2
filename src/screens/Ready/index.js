@@ -26,7 +26,7 @@ const Ready = ({ resp, _getpotatoes }) => {
                 <View style={{ height: "17%" }}>
                     <Header
                         isProfile={true}
-                        MidIcon={require("../../assets/Potato.png")}
+                        MidIcon={require("../../assets/PotatoSp.png")}
                         goBack={true} />
                 </View>
                 {/* </HEADER> */}
@@ -57,7 +57,8 @@ const Ready = ({ resp, _getpotatoes }) => {
                         <Button
                             name="Let’s go"
                             backgroundColor={Colors.secondary}
-                            fontSize={13} _func={() => {
+                            fontSize={13} 
+                            _func={() => {
                                 _getpotatoes(resp)
                             }} />
                     </View>
